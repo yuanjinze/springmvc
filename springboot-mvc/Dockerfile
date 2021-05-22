@@ -1,14 +1,28 @@
 FROM openjdk:8-jre
 
-ENV  WORKPATH  /data/demo
-ENV  APPNAME   ./target/springmvc.jar
+#from
+#copy/add
+#env/arg
+#volume
+#workdir
+#expose
+#run
+#cmd/entrypoint
 
+ENV WORK_PATH /data/demo
+ENV APP_NAME ./target/*.jar
+#ENV JAVA_OPTS -Xmx1280m -Xss256k
+
+WORKDIR $WORK_PATH
+
+#EXPOSE 8090
 VOLUME ["/data/demo", "/tmp/demo"]
-WORKDIR $WORKPATH
 
-COPY $APPNAME  $WORKPATH/springmvc.jar
-#COPY run.sh    /data/demo/
+COPY $APP_NAME $WORK_PATH/springmvc.jar
 
-#RUN  echo "Asia/Shanghai" > /etc/timezone
+#GMT+8
+RUN echo "Asia/Shanghai" > /etc/timezone
 
-CMD ["java","-jar", "/data/demo/springmvc.jar"]
+ENTRYPOINT exec java $JAVA_OPTS -jar -Djava.security.egd=file:/dev/./urandom -jar springmvc.jar
+
+#CMD ["java","-jar", "/data/demo/springmvc.jar"]
